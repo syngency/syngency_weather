@@ -13,11 +13,9 @@ class WeatherFactory {
   /// Fetch current weather based on geographical coordinates
   /// Result is JSON.
   /// For API documentation, see: https://openweathermap.org/current
-  Future<Weather> currentWeatherByLocation(
-      double latitude, double longitude) async {
+  Future<Weather> currentWeatherByLocation(double latitude, double longitude) async {
     try {
-      Map<String, dynamic> currentWeather =
-          await _sendRequest(CURRENT_WEATHER, lat: latitude, lon: longitude);
+      Map<String, dynamic> currentWeather = await _sendRequest(CURRENT_WEATHER, lat: latitude, lon: longitude);
       return Weather(currentWeather);
     } catch (exception) {
       print(exception);
@@ -30,8 +28,7 @@ class WeatherFactory {
   /// For API documentation, see: https://openweathermap.org/current
   Future<Weather> currentWeatherByCityName(String cityName) async {
     try {
-      Map<String, dynamic> currentWeather =
-          await _sendRequest(CURRENT_WEATHER, cityName: cityName);
+      Map<String, dynamic> currentWeather = await _sendRequest(CURRENT_WEATHER, cityName: cityName);
       return Weather(currentWeather);
     } catch (exception) {
       print(exception);
@@ -42,12 +39,10 @@ class WeatherFactory {
   /// Fetch current weather based on geographical coordinates.
   /// Result is JSON.
   /// For API documentation, see: https://openweathermap.org/forecast5
-  Future<List<Weather>> fiveDayForecastByLocation(
-      double latitude, double longitude) async {
+  Future<List<Weather>> fiveDayForecastByLocation(double latitude, double longitude) async {
     List<Weather> forecast = new List<Weather>();
     try {
-      Map<String, dynamic> jsonForecast =
-          await _sendRequest(FIVE_DAY_FORECAST, lat: latitude, lon: longitude);
+      Map<String, dynamic> jsonForecast = await _sendRequest(FIVE_DAY_FORECAST, lat: latitude, lon: longitude);
       forecast = _parseForecast(jsonForecast);
     } catch (exception) {
       print(exception);
@@ -61,8 +56,7 @@ class WeatherFactory {
   Future<List<Weather>> fiveDayForecastByCityName(String cityName) async {
     List<Weather> forecasts = new List<Weather>();
     try {
-      Map<String, dynamic> jsonForecast =
-          await _sendRequest(FIVE_DAY_FORECAST, cityName: cityName);
+      Map<String, dynamic> jsonForecast = await _sendRequest(FIVE_DAY_FORECAST, cityName: cityName);
       forecasts = _parseForecast(jsonForecast);
     } catch (exception) {
       print(exception);
@@ -70,13 +64,12 @@ class WeatherFactory {
     return forecasts;
   }
 
-  Future<Map<String, dynamic>> _sendRequest(String tag,
-      {double lat, double lon, String cityName}) async {
+  Future<Map<String, dynamic>> _sendRequest(String tag, {double lat, double lon, String cityName}) async {
     /// Build HTTP get url by passing the required parameters
     String url = _buildUrl(tag, cityName, lat, lon);
 
     /// Send HTTP get response with the url
-    http.Response response = await http.get(url);
+    http.Response response = await http.get(Uri.parse(url));
 
     /// Perform error checking on response:
     /// Status code 200 means everything went well
@@ -89,8 +82,7 @@ class WeatherFactory {
     /// or some other unspecified error could occur.
     /// The concrete error should be clear from the HTTP response body.
     else {
-      throw OpenWeatherAPIException(
-          "The API threw an exception: ${response.body}");
+      throw OpenWeatherAPIException("The API threw an exception: ${response.body}");
     }
   }
 
