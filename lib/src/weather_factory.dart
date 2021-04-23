@@ -3,7 +3,7 @@ part of weather_library;
 /// Plugin for fetching weather data in JSON.
 class WeatherFactory {
   String _apiKey;
-  Language language = Language.ENGLISH;
+  Language? language = Language.ENGLISH;
   static const String FIVE_DAY_FORECAST = 'forecast';
   static const String CURRENT_WEATHER = 'weather';
   static const int STATUS_OK = 200;
@@ -13,9 +13,9 @@ class WeatherFactory {
   /// Fetch current weather based on geographical coordinates
   /// Result is JSON.
   /// For API documentation, see: https://openweathermap.org/current
-  Future<Weather> currentWeatherByLocation(double latitude, double longitude) async {
+  Future<Weather?> currentWeatherByLocation(double latitude, double longitude) async {
     try {
-      Map<String, dynamic> currentWeather = await _sendRequest(CURRENT_WEATHER, lat: latitude, lon: longitude);
+      Map<String, dynamic> currentWeather = await (_sendRequest(CURRENT_WEATHER, lat: latitude, lon: longitude) as FutureOr<Map<String, dynamic>>);
       return Weather(currentWeather);
     } catch (exception) {
       print(exception);
@@ -26,9 +26,9 @@ class WeatherFactory {
   /// Fetch current weather based on city name
   /// Result is JSON.
   /// For API documentation, see: https://openweathermap.org/current
-  Future<Weather> currentWeatherByCityName(String cityName) async {
+  Future<Weather?> currentWeatherByCityName(String cityName) async {
     try {
-      Map<String, dynamic> currentWeather = await _sendRequest(CURRENT_WEATHER, cityName: cityName);
+      Map<String, dynamic> currentWeather = await (_sendRequest(CURRENT_WEATHER, cityName: cityName) as FutureOr<Map<String, dynamic>>);
       return Weather(currentWeather);
     } catch (exception) {
       print(exception);
@@ -42,7 +42,7 @@ class WeatherFactory {
   Future<List<Weather>> fiveDayForecastByLocation(double latitude, double longitude) async {
     List<Weather> forecast = new List<Weather>();
     try {
-      Map<String, dynamic> jsonForecast = await _sendRequest(FIVE_DAY_FORECAST, lat: latitude, lon: longitude);
+      Map<String, dynamic> jsonForecast = await (_sendRequest(FIVE_DAY_FORECAST, lat: latitude, lon: longitude) as FutureOr<Map<String, dynamic>>);
       forecast = _parseForecast(jsonForecast);
     } catch (exception) {
       print(exception);
@@ -56,7 +56,7 @@ class WeatherFactory {
   Future<List<Weather>> fiveDayForecastByCityName(String cityName) async {
     List<Weather> forecasts = new List<Weather>();
     try {
-      Map<String, dynamic> jsonForecast = await _sendRequest(FIVE_DAY_FORECAST, cityName: cityName);
+      Map<String, dynamic> jsonForecast = await (_sendRequest(FIVE_DAY_FORECAST, cityName: cityName) as FutureOr<Map<String, dynamic>>);
       forecasts = _parseForecast(jsonForecast);
     } catch (exception) {
       print(exception);
@@ -64,7 +64,7 @@ class WeatherFactory {
     return forecasts;
   }
 
-  Future<Map<String, dynamic>> _sendRequest(String tag, {double lat, double lon, String cityName}) async {
+  Future<Map<String, dynamic>?> _sendRequest(String tag, {double? lat, double? lon, String? cityName}) async {
     /// Build HTTP get url by passing the required parameters
     String url = _buildUrl(tag, cityName, lat, lon);
 
@@ -74,7 +74,7 @@ class WeatherFactory {
     /// Perform error checking on response:
     /// Status code 200 means everything went well
     if (response.statusCode == STATUS_OK) {
-      Map<String, dynamic> jsonBody = json.decode(response.body);
+      Map<String, dynamic>? jsonBody = json.decode(response.body);
       return jsonBody;
     }
 
@@ -86,7 +86,7 @@ class WeatherFactory {
     }
   }
 
-  String _buildUrl(String tag, String cityName, double lat, double lon) {
+  String _buildUrl(String tag, String? cityName, double? lat, double? lon) {
     String url = 'https://api.openweathermap.org/data/2.5/' + '$tag?';
 
     if (cityName != null) {
@@ -96,7 +96,7 @@ class WeatherFactory {
     }
 
     url += 'appid=$_apiKey&';
-    url += 'lang=${_languageCode[language]}';
+    url += 'lang=${_languageCode[language!]}';
     return url;
   }
 }
