@@ -15,7 +15,8 @@ class WeatherFactory {
   /// For API documentation, see: https://openweathermap.org/current
   Future<Weather?> currentWeatherByLocation(double latitude, double longitude) async {
     try {
-      Map<String, dynamic> currentWeather = await (_sendRequest(CURRENT_WEATHER, lat: latitude, lon: longitude) as FutureOr<Map<String, dynamic>>);
+      Map<String, dynamic> currentWeather =
+          await (_sendRequest(CURRENT_WEATHER, lat: latitude, lon: longitude) as FutureOr<Map<String, dynamic>>);
       return Weather(currentWeather);
     } catch (exception) {
       print(exception);
@@ -28,7 +29,8 @@ class WeatherFactory {
   /// For API documentation, see: https://openweathermap.org/current
   Future<Weather?> currentWeatherByCityName(String cityName) async {
     try {
-      Map<String, dynamic> currentWeather = await (_sendRequest(CURRENT_WEATHER, cityName: cityName) as FutureOr<Map<String, dynamic>>);
+      Map<String, dynamic> currentWeather =
+          await (_sendRequest(CURRENT_WEATHER, cityName: cityName) as FutureOr<Map<String, dynamic>>);
       return Weather(currentWeather);
     } catch (exception) {
       print(exception);
@@ -40,9 +42,10 @@ class WeatherFactory {
   /// Result is JSON.
   /// For API documentation, see: https://openweathermap.org/forecast5
   Future<List<Weather>> fiveDayForecastByLocation(double latitude, double longitude) async {
-    List<Weather> forecast = new List<Weather>();
+    List<Weather> forecast = [];
     try {
-      Map<String, dynamic> jsonForecast = await (_sendRequest(FIVE_DAY_FORECAST, lat: latitude, lon: longitude) as FutureOr<Map<String, dynamic>>);
+      Map<String, dynamic> jsonForecast =
+          await (_sendRequest(FIVE_DAY_FORECAST, lat: latitude, lon: longitude) as FutureOr<Map<String, dynamic>>);
       forecast = _parseForecast(jsonForecast);
     } catch (exception) {
       print(exception);
@@ -54,9 +57,10 @@ class WeatherFactory {
   /// Result is JSON.
   /// For API documentation, see: https://openweathermap.org/forecast5
   Future<List<Weather>> fiveDayForecastByCityName(String cityName) async {
-    List<Weather> forecasts = new List<Weather>();
+    List<Weather> forecasts = [];
     try {
-      Map<String, dynamic> jsonForecast = await (_sendRequest(FIVE_DAY_FORECAST, cityName: cityName) as FutureOr<Map<String, dynamic>>);
+      Map<String, dynamic> jsonForecast =
+          await (_sendRequest(FIVE_DAY_FORECAST, cityName: cityName) as FutureOr<Map<String, dynamic>>);
       forecasts = _parseForecast(jsonForecast);
     } catch (exception) {
       print(exception);
