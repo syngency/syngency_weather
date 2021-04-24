@@ -15,9 +15,8 @@ class WeatherFactory {
   /// For API documentation, see: https://openweathermap.org/current
   Future<Weather?> currentWeatherByLocation(double latitude, double longitude) async {
     try {
-      Map<String, dynamic> currentWeather =
-          await (_sendRequest(CURRENT_WEATHER, lat: latitude, lon: longitude) as FutureOr<Map<String, dynamic>>);
-      return Weather(currentWeather);
+      Map<String, dynamic>? currentWeather = await _sendRequest(CURRENT_WEATHER, lat: latitude, lon: longitude);
+      return Weather(currentWeather!);
     } catch (exception) {
       print(exception);
     }
