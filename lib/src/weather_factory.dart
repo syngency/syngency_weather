@@ -44,9 +44,8 @@ class WeatherFactory {
   Future<List<Weather>> fiveDayForecastByLocation(double latitude, double longitude) async {
     List<Weather> forecast = [];
     try {
-      Map<String, dynamic> jsonForecast =
-          await (_sendRequest(FIVE_DAY_FORECAST, lat: latitude, lon: longitude) as FutureOr<Map<String, dynamic>>);
-      forecast = _parseForecast(jsonForecast);
+      Map<String, dynamic>? jsonForecast = await _sendRequest(FIVE_DAY_FORECAST, lat: latitude, lon: longitude);
+      forecast = _parseForecast(jsonForecast!);
     } catch (exception) {
       print(exception);
     }
